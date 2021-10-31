@@ -7,8 +7,8 @@ namespace IntentAnalysis.DataStructures
     public class IntentPrediction
     {
         [ColumnName("PredictedLabel")]
-        public string PredictedLabel;
+        public string? PredictedLabel;
 
-        public float[] Score;
+        public float[]? Score;
     }
 }
