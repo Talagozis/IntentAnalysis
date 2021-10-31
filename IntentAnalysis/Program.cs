@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using IntentAnalysis.Common;
 using IntentAnalysis.DataStructures;
@@ -49,7 +50,7 @@ namespace IntentAnalysis
             ConsoleHelper.peekDataViewInConsole(mlContext, trainingDataView, dataProcessPipeline, 2);
 
             // STEP 3: Create the selected training algorithm/trainer
-            IEstimator<ITransformer> trainer = null;
+            IEstimator<ITransformer> trainer;
             switch (selectedStrategy)
             {
                 case MyTrainerStrategy.SdcaMultiClassTrainer:
@@ -66,6 +67,8 @@ namespace IntentAnalysis
                         trainer = mlContext.MulticlassClassification.Trainers.OneVersusAll(averagedPerceptronBinaryTrainer, labelColumnName: "label");
                         break;
                     }
+                default:
+                    throw new InvalidEnumArgumentException($"The value of '{nameof(selectedStrategy)}' is not an enum of type '{nameof(MyTrainerStrategy)}'.");
             }
 
             //Set the trainer/algorithm and map label to value (original readable state)
@@ -79,7 +82,7 @@ namespace IntentAnalysis
             Console.WriteLine("=============== Cross-validating to get model's accuracy metrics ===============");
             var crossValidationResults = mlContext.MulticlassClassification.CrossValidate(data: testingDataView, estimator: trainingPipeline, numberOfFolds: 6, labelColumnName: "label");
 
-            ConsoleHelper.printMulticlassClassificationFoldsAverageMetrics(trainer?.ToString(), crossValidationResults);
+            ConsoleHelper.printMulticlassClassificationFoldsAverageMetrics(trainer.ToString() ?? string.Empty, crossValidationResults);
 
             // STEP 5: Train the model fitting to the DataSet
             Console.WriteLine("=============== Training the model ===============");

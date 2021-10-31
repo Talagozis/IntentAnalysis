@@ -314,8 +314,8 @@ namespace IntentAnalysis.Common
     {
         public static string getAbsolutePath(string relativePath)
         {
-            var dataRoot = new FileInfo(typeof(Program).Assembly.Location);
-            string assemblyFolderPath = dataRoot.Directory?.FullName;
+            FileInfo dataRoot = new FileInfo(typeof(Program).Assembly.Location);
+            string assemblyFolderPath = dataRoot.Directory?.FullName ?? throw new InvalidOperationException($"The {nameof(FileInfo.Directory)} is null");
 
             string fullPath = Path.Combine(assemblyFolderPath, relativePath);
 

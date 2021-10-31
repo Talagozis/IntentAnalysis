@@ -6,9 +6,9 @@ namespace IntentAnalysis.DataStructures
     public class IntentData
     {
         [LoadColumn(0)]
-        public string text;
+        public string? text;
 
         [LoadColumn(1)]
-        public string label;
+        public string? label;
     }
 }
